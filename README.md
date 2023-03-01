@@ -1,1 +1,1 @@
-# NA62_CEDARH_Handbook
+# NA62 CEDAR-H Handbook
