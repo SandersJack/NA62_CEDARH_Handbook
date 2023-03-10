@@ -1,7 +1,22 @@
+import numpy as np
+
+
 class CEDARH():
     
     #def __init__(self):
     #    pass
+    
+    def nindex(self,lam):
+        A = 138.744
+        B = 185.655
+        L1 = 103.564e-9
+        L2 = 13073.1e-6
+        PressureFactor = 380 / 101.325 
+        TemperatureFactor = 293.15 / 273.15
+        ReducedIndex = A + B * np.exp(-lam / L1 - pow(lam / L2, 2.0))
+        ReducedIndex *= (PressureFactor / TemperatureFactor)
+        Index = 1.0 + (ReducedIndex * 1e-6)
+        return Index
     
     def CedarHManginMirrorReflectivity(self,wavelength):
         x1 = wavelength
