@@ -1,5 +1,9 @@
 import numpy as np
+from enum import Enum
 
+class CedarPMTQE(Enum):
+    kPMT_R9880U_110 = 0
+    kPMT_R7400U_03 = 1
 
 class CEDARH():
     
@@ -321,26 +325,35 @@ class CEDARH():
             refl = 1
         return refl    
     
+    def Gaus(self,x,mean,sigma,norm=False):
+        if (sigma == 0): return 1.e30
+        arg = (x-mean)/sigma;
+        res = np.exp(-0.5*arg*arg);
+        if not norm: return res
+        return res/(np.sqrt(2*np.pi)*sigma)
     
-    def CedarQE_EMI_9820_QB(wavelength):
+    def CedarQE_R9880U_110(self, wavelength):
+        par = [1489.053765000671,     -20.61340505642701,     0.09607362916193821,
+                      -0.000144918944048782, -1.087924475686453e-07, 3.619104979507752e-10,
+                      2.742092765095943e-13, -1.067200613381487e-15, 6.333980140159196e-19,
+                      4.675391577876988,     505.1903283978535,      15.37334879108591,
+                      -23.08738129086531,    358.7521218115685,      53.63424346389683]
 
-        wlraw = wavelength 
-        wl = 141.0 if wlraw < 141.0 else 649.0 if wlraw > 649.0 else wlraw
-        wls = [140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360,
-                                    380, 400, 420, 440, 460, 480, 500, 520, 540, 560, 600, 650]
-        qes = [0,    20, 21.6, 21.6, 21.4, 21.4, 22,   24, 25, 25.6, 26, 26,
-                                    26.4, 26, 24.8, 23.2, 20.8, 18,   15.2, 12, 8,  5.6,  2,  0]
-
-        i = 0;
-        while(True):
-            if(wl > wls[i] and wl < wls[i + 1]):
-                break
-            else:
-                ++i;
-        
-        return 0.01 * (qes[i] + (wl - wls[i]) / (wls[i + 1] - wls[i]) * (qes[i + 1] - qes[i]))
+        x = wavelength
+        x1 = x if x < 650 else 650
+        qe = 0
+        for i in range(9):
+            qe += par[i] * pow(x1, i);
+        qe += par[9] * self.Gaus(x1, par[10], par[11]);
+        qe += par[12] * self.Gaus(x1, par[13], par[14]);
+        qe *= 0.01;
+        if(x > 650):
+            qe *= (1 - (x - 650) / (675 - 650));
+        if(qe < 0 or x < 200):
+            qe = 0
+        return qe;
     
-    def CedarQE_R7400U_03(wavelength):
+    def CedarQE_R7400U_03(self,wavelength):
         par = [-58.41145755814,     1.450540667766,      -0.01561331198442,
                                     9.545010080831e-05,  -3.648461145542e-07, 9.047599515597e-10,
                                     -1.457151808585e-12, 1.471328774241e-15,  -8.46121819724e-19,
@@ -357,3 +370,9 @@ class CEDARH():
         if(qe < 0):
             qe = 0
         return qe
+
+    def GetCedarQE(self,PMTType,wavelength):
+        if PMTType == CedarPMTQE.kPMT_R9880U_110:
+            return self.CedarQE_R9880U_110(wavelength)
+        elif PMTType == CedarPMTQE.kPMT_R7400U_03:
+            return self.CedarQE_R7400U_03(wavelength)
