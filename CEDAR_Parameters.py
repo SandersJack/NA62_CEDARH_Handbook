@@ -320,3 +320,40 @@ class CEDARH():
         if(refl > 1):
             refl = 1
         return refl    
+    
+    
+    def CedarQE_EMI_9820_QB(wavelength):
+
+        wlraw = wavelength 
+        wl = 141.0 if wlraw < 141.0 else 649.0 if wlraw > 649.0 else wlraw
+        wls = [140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360,
+                                    380, 400, 420, 440, 460, 480, 500, 520, 540, 560, 600, 650]
+        qes = [0,    20, 21.6, 21.6, 21.4, 21.4, 22,   24, 25, 25.6, 26, 26,
+                                    26.4, 26, 24.8, 23.2, 20.8, 18,   15.2, 12, 8,  5.6,  2,  0]
+
+        i = 0;
+        while(True):
+            if(wl > wls[i] and wl < wls[i + 1]):
+                break
+            else:
+                ++i;
+        
+        return 0.01 * (qes[i] + (wl - wls[i]) / (wls[i + 1] - wls[i]) * (qes[i + 1] - qes[i]))
+    
+    def CedarQE_R7400U_03(wavelength):
+        par = [-58.41145755814,     1.450540667766,      -0.01561331198442,
+                                    9.545010080831e-05,  -3.648461145542e-07, 9.047599515597e-10,
+                                    -1.457151808585e-12, 1.471328774241e-15,  -8.46121819724e-19,
+                                    2.11384701372e-22]
+
+        x = wavelength
+        if(x < 180):
+            return 0
+        if(x > 660):
+            return 0
+        qe = 0;
+        for i in range(10):
+            qe += par[i] * pow(x, i);
+        if(qe < 0):
+            qe = 0
+        return qe
