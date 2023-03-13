@@ -31,33 +31,6 @@ class CEDARH():
 
         return refl
 
-
-    def ManginMirrorReflectivity(self,wavelength):
-        x1 = wavelength
-        if (x1 < 630):
-            x = x1
-        else:
-            x = 630
-        refl = -0.261299 + 0.00938637 * x - 2.47446e-05 * x * x + 2.31118e-08 * x * x * x - 5.79119e-12 * x * x * x * x
-        if(refl < 0):
-            refl = 0
-        if(refl > 1):
-            refl = 1
-        return refl
-
-    def ChromaticCorrectorReflectivity(self,wavelength):
-        x1 = wavelength
-        refl = -999
-
-        if(x1 <200):
-            x1 = 200
-        if(x1>400):
-            x1 = 400
-
-        refl = (1.5858121212121144e-06*x1**2 + -0.001262619606060603*x1 + 0.28936151818181793)
-        return refl
-
-
     def CondenserCEDARHTransmittance(self,iWindow, wavelength):
         x = wavelength
         f = -999
