@@ -41,6 +41,19 @@ class CEDARH():
 
         refl = (1.5858121212121144e-06*x1**2 + -0.001262619606060603*x1 + 0.28936151818181793)
         return refl
+    
+    def ChromaticCorrectorF1Reflectivity(self, wavelength):
+        x1 = wavelength 
+        refl = -999
+
+        if(x1 <200):
+            x1 = 200
+        if(x1>400):
+            x1 = 400
+
+        refl = -2.14518519e-09*pow(x1,3) + 2.91885714e-06*pow(x1,2) + -1.33610688e-03*x1 + 2.24519683e-01;
+        return refl
+
 
 
     def CondenserCEDARHTransmittance(self,iWindow, wavelength):
