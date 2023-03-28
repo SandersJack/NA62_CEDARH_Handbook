@@ -51,8 +51,21 @@ class CEDARH():
         if(x1>400):
             x1 = 400
 
-        refl = -2.14518519e-09*pow(x1,3) + 2.91885714e-06*pow(x1,2) + -1.33610688e-03*x1 + 2.24519683e-01;
+        refl = -2.14518519e-09*pow(x1,3) + 2.91885714e-06*pow(x1,2) + -1.33610688e-03*x1 + 2.24519683e-01
         return refl
+    
+    def ChromaticCorrectorF2Reflectivity(self, wavelength):
+        x1 = wavelength
+        refl = -999
+
+        if(x1 < 200):
+            x1 = 200
+        if(x1 > 400):
+            x1 = 400
+
+        refl = -5.25874126e-11*pow(x1,4) + 6.58793059e-08*pow(x1,3) + -2.96468531e-05*pow(x1,2) + 5.52067858e-03*x1 + -3.15962315e-01
+        return refl
+
 
 
 
