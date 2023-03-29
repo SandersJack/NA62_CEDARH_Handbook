@@ -1,7 +1,26 @@
+import numpy as np
+from enum import Enum
+
+class CedarPMTQE(Enum):
+    kPMT_R9880U_110 = 0
+    kPMT_R7400U_03 = 1
+
 class CEDARH():
     
     #def __init__(self):
     #    pass
+    
+    def nindex(self,lam):
+        A = 138.744
+        B = 185.655
+        L1 = 103.564e-9
+        L2 = 13073.1e-6
+        PressureFactor = 380 / 101.325 
+        TemperatureFactor = 293.15 / 273.15
+        ReducedIndex = A + B * np.exp(-lam / L1 - pow(lam / L2, 2.0))
+        ReducedIndex *= (PressureFactor / TemperatureFactor)
+        Index = 1.0 + (ReducedIndex * 1e-6)
+        return Index
     
     def CedarHManginMirrorReflectivity(self,wavelength):
         x1 = wavelength
@@ -363,3 +382,55 @@ class CEDARH():
         if(refl > 1):
             refl = 1
         return refl    
+    
+    def Gaus(self,x,mean,sigma,norm=False):
+        if (sigma == 0): return 1.e30
+        arg = (x-mean)/sigma;
+        res = np.exp(-0.5*arg*arg);
+        if not norm: return res
+        return res/(np.sqrt(2*np.pi)*sigma)
+    
+    def CedarQE_R9880U_110(self, wavelength):
+        par = [1489.053765000671,     -20.61340505642701,     0.09607362916193821,
+                      -0.000144918944048782, -1.087924475686453e-07, 3.619104979507752e-10,
+                      2.742092765095943e-13, -1.067200613381487e-15, 6.333980140159196e-19,
+                      4.675391577876988,     505.1903283978535,      15.37334879108591,
+                      -23.08738129086531,    358.7521218115685,      53.63424346389683]
+
+        x = wavelength
+        x1 = x if x < 650 else 650
+        qe = 0
+        for i in range(9):
+            qe += par[i] * pow(x1, i);
+        qe += par[9] * self.Gaus(x1, par[10], par[11]);
+        qe += par[12] * self.Gaus(x1, par[13], par[14]);
+        qe *= 0.01;
+        if(x > 650):
+            qe *= (1 - (x - 650) / (675 - 650));
+        if(qe < 0 or x < 200):
+            qe = 0
+        return qe;
+    
+    def CedarQE_R7400U_03(self,wavelength):
+        par = [-58.41145755814,     1.450540667766,      -0.01561331198442,
+                                    9.545010080831e-05,  -3.648461145542e-07, 9.047599515597e-10,
+                                    -1.457151808585e-12, 1.471328774241e-15,  -8.46121819724e-19,
+                                    2.11384701372e-22]
+
+        x = wavelength
+        if(x < 180):
+            return 0
+        if(x > 660):
+            return 0
+        qe = 0;
+        for i in range(10):
+            qe += par[i] * pow(x, i);
+        if(qe < 0):
+            qe = 0
+        return qe
+
+    def GetCedarQE(self,PMTType,wavelength):
+        if PMTType == CedarPMTQE.kPMT_R9880U_110:
+            return self.CedarQE_R9880U_110(wavelength)
+        elif PMTType == CedarPMTQE.kPMT_R7400U_03:
+            return self.CedarQE_R7400U_03(wavelength)
