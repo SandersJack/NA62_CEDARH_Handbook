@@ -28,12 +28,70 @@ class CEDARH():
 
         if(x1 <200):
             x1 = 200
+        if(x1>600):
+            x1 = 600
+
+        if(x1 < 335):
+            refl = 2.78518519e-08*pow(x1,3) + -2.59047619e-05*pow(x1,2) + 8.05402116e-03*x1 + 5.74444444e-02
+        else:
+            refl = -1.83555556e-08*pow(x1,3) + 2.10500000e-05*pow(x1,2) + -8.06227778e-03*x1 + 1.92416667e+00
+
+        return refl
+
+
+    def ManginMirrorReflectivity(self,wavelength):
+        x1 = wavelength
+        if (x1 < 630):
+            x = x1
+        else:
+            x = 630
+        refl = -0.261299 + 0.00938637 * x - 2.47446e-05 * x * x + 2.31118e-08 * x * x * x - 5.79119e-12 * x * x * x * x
+        
+        if(refl < 0):
+            refl = 0
+        if(refl > 1):
+            refl = 1
+        
+        return refl
+
+    def ChromaticCorrectorReflectivity(self,wavelength):
+        x1 = wavelength
+        refl = -999
+
+        if(x1 <200):
+            x1 = 200
         if(x1>400):
             x1 = 400
 
-        refl = (-1.965162770562752e-06*x1**2 + 0.0013233545290043166*x1 + 0.6784368910822532)
-
+        refl = (1.5858121212121144e-06*x1**2 + -0.001262619606060603*x1 + 0.28936151818181793)
         return refl
+    
+    def ChromaticCorrectorF1Reflectivity(self, wavelength):
+        x1 = wavelength 
+        refl = -999
+
+        if(x1 <200):
+            x1 = 200
+        if(x1>400):
+            x1 = 400
+
+        refl = -2.14518519e-09*pow(x1,3) + 2.91885714e-06*pow(x1,2) + -1.33610688e-03*x1 + 2.24519683e-01
+        return refl
+    
+    def ChromaticCorrectorF2Reflectivity(self, wavelength):
+        x1 = wavelength
+        refl = -999
+
+        if(x1 < 200):
+            x1 = 200
+        if(x1 > 400):
+            x1 = 400
+
+        refl = -5.25874126e-11*pow(x1,4) + 6.58793059e-08*pow(x1,3) + -2.96468531e-05*pow(x1,2) + 5.52067858e-03*x1 + -3.15962315e-01
+        return refl
+
+
+
 
     def CondenserCEDARHTransmittance(self,iWindow, wavelength):
         x = wavelength
