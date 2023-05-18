@@ -434,3 +434,14 @@ class CEDARH():
             return self.CedarQE_R9880U_110(wavelength)
         elif PMTType == CedarPMTQE.kPMT_R7400U_03:
             return self.CedarQE_R7400U_03(wavelength)
+        
+        
+    def MgF2CoatingTransmittance(self,Wavelength):
+        x = Wavelength
+        if(x < 180):
+            x = 180
+        if(x > 700):
+            x = 700
+        
+        T = 6.78242358e-15*pow(x,5) + -1.66281498e-11*pow(x,4) + 1.61100842e-08*pow(x,3) + -7.76155601e-06*pow(x,2) + 1.88890309e-03*x + 7.48061337e-01
+        return T
