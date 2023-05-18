@@ -1,0 +1,47 @@
+From:	Thomas Schneider
+Sent:	17 April 2023 15:36
+To:	Jack Dylan Sanders
+Subject:	RE: CEDAR Optics datasheet question
+Attachments:	TRM condesor lenses AR coated.JPG; TRM plano convex AR coated.JPG
+
+Dear Jack,
+
+Unfortunately they give only the reflections of both sides and not Transmission values. First order 
+transmission should be the 100% subtracting the two Fresnel reflections of the 2 surfaces …assuming 
+there is no absorption and that the surfaces are parallel.  Unfortunately the 2 surface of the Chromatic 
+corrector are not parallel. 
+
+We faced the same problem with the condenser lenses see mail below (7/9/2022):
+________________________
+Dear John and Antonio, 
+AR coatings are finished. Result on the PLANO CONVEX lenses and the witness sample (flat Suprasil disc) 
+do correspond to what I have presented to you. Unfortunately this is not the case for the condenser 
+lenses. TRM in the UV range is less enhanced. I attached the corresponding plots. We always learn new 
+things. The AR calculation I can do with my software is apparently valid only for parallel surface 
+substrates. The condense lenses do behave different. Looks to me that the light angle in the backside AR 
+layer is bigger due to the not parallel surfaces … light is traveling longer and the magic ¼ wavelength 
+enhancement is shifting to the visible. 
+_________________________
+Hope this information is useful. One could measure TRM of the lens with our integration Sphere setup. 
+But I fear the object is too big and on top not available for measurement any more ( installed)
+
+Kind Regards 
+Thomas
+
+
+From: Jack Dylan Sanders <jack.sanders@cern.ch>  
+Sent: 13 April 2023 13:50 
+To: Thomas Schneider <Thomas.Schneider@cern.ch> 
+Subject: CEDAR Optics datasheet question
+
+Dear Thomas, 
+
+Sorry to bother you but I wondered if you help me with a question. In the attached data sheet, the 
+reflectivity of the two faces of the CEDAR Chromatic Corrector is given.
+Now is this the Transmission of the coatings? Or Is it the reflectivity’s only and doesn’t take into account 
+the transmission through the coatings? 
+
+Any Help would be great!
+
+Many Thanks
+Jack
